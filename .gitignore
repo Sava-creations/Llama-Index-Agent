@@ -1,1 +1,204 @@
+# Git Setup and Commit Guide for Python Project
+
+## 1. Initial Git Setup                                 Virtual environments are always huge and machine-specificAPI keys must never be shared publicly Cache files are automatically regenerated It's considered bad practice to commit these files
+### Navigate to your project directory
+```bash
+cd your-project-folder
+```
+
+### Initialize Git repository
+```bash
+git init
+```
+
+## 2. Create .gitignore File
+
+Create a `.gitignore` file in your project root with the following content:
+
+```gitignore
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Virtual environment - IMPORTANT!
+myenv/
+venv/
+env/
+ENV/
+.venv/
+Scripts/
+Lib/
+pyvenv.cfg
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite3
+
+# Model files (if large)
+*.bin
+*.model
+
+# Cache directories
+.cache/
+.pytest_cache/
+
+# Storage context (LlamaIndex)
+storage/
+```
+
+## 3. Create requirements.txt
+
+Before committing, create a `requirements.txt` file:
+
+```bash
+pip freeze > requirements.txt
+```
+
+## 4. Check Git Status
+
+```bash
+git status
+```
+
+This shows you what files Git is tracking and what's being ignored.
+
+## 5. Add Files to Git
+
+### Add specific files (recommended for first commit):
+```bash
+git add your_main_script.py
+git add requirements.txt
+git add .gitignore
+```
+
+### Or add all non-ignored files:
+```bash
+git add .
+```
+
+## 6. Make Your First Commit
+
+```bash
+git commit -m "Initial commit: Add RAG agent with memory and tools"
+```
+
+## 7. Connect to GitHub
+
+### Create a new repository on GitHub (without initializing with README)
+
+### Add remote origin:
+```bash
+git remote add origin https://github.com/yourusername/your-repo-name.git
+```
+
+### Push to GitHub:
+```bash
+git branch -M main
+git push -u origin main
+```
+
+## Important Notes
+
+### About Virtual Environment (myenv)
+- **DO NOT** upload your virtual environment (`myenv`) to GitHub
+- Virtual environments are machine-specific and contain large files
+- Always include `myenv/` in your `.gitignore`
+- Others will recreate the environment using your `requirements.txt`
+
+### About .env File
+- **NEVER** commit `.env` files with API keys
+- Always add `.env` to `.gitignore`
+- Consider creating a `.env.example` file with dummy values:
+
+```bash
+# .env.example
+GROQ_API_KEY=your_groq_api_key_here
+MeM0_API_KEY=your_mem0_api_key_here
+```
+
+## Project Structure Should Look Like:
+```
+your-project/
+│
+├── myenv/                 # (ignored by git)
+├── budget_data/           # your data folder
+├── storage/               # (ignored - LlamaIndex storage)
+├── .env                   # (ignored - contains real API keys)
+├── .env.example           # (committed - shows required variables)
+├── .gitignore            # (committed)
+├── requirements.txt      # (committed)
+├── your_main_script.py   # (committed)
+└── README.md             # (optional but recommended)
+```
+
+## Common Issues and Solutions
+
+### If you accidentally added large files:
+```bash
+git rm --cached filename
+git commit -m "Remove large file from tracking"
+```
+
+### If you committed .env accidentally:
+```bash
+git rm --cached .env
+git commit -m "Remove .env from tracking"
+```
+
+### To see what's being tracked:
+```bash
+git ls-files
+```
+
+## Best Practices
+
+1. **Always check** `git status` before committing
+2. **Review changes** with `git diff` before adding
+3. **Use descriptive commit messages**
+4. **Commit frequently** with small, logical changes
+5. **Never commit secrets** (API keys, passwords, etc.)
+6. **Test your .gitignore** by creating a new clone and checking what's included
